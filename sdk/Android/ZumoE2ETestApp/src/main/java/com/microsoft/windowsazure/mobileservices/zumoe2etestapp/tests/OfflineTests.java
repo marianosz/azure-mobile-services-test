@@ -1679,7 +1679,7 @@ public class OfflineTests extends TestGroup {
 
                     MobileServiceSyncTable<OfflineReadyItem> localTable = offlineReadyClient.getSyncTable(tableName, OfflineReadyItem.class);
 
-                    MobileServiceJsonTable remoteTable = offlineReadyClient.getTable(tableName);
+                    MobileServiceTable<OfflineReadyItem> remoteTable = offlineReadyClient.getTable(tableName, OfflineReadyItem.class);
 
                     offlineReadyClient.getSyncContext().initialize(localStore, new SimpleSyncHandler()).get();
 
@@ -1691,22 +1691,18 @@ public class OfflineTests extends TestGroup {
 
                     log("Removed all items from the local table");
 
-                    List<OfflineReadyItem> mOfflineReadyItemsNoVersion = new ArrayList<OfflineReadyItem>();
-
                     Random rand = new Random();
 
                     int elementsCount = rand.nextInt((100 - 50) + 1) + 50;
 
                     String testFilter = UUID.randomUUID().toString();
 
-                    Gson gsonBuilder = offlineReadyClient.getGsonBuilder().create();
-
                     for (int i = 0; i < elementsCount; i++) {
 
                         OfflineReadyItem item = new OfflineReadyItem(new Random());
                         item.setName(testFilter);
 
-                        remoteTable.insert(gsonBuilder.toJsonTree(item).getAsJsonObject()).get();
+                        remoteTable.insert(item).get();
 
                     }
 
